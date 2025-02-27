@@ -28,15 +28,12 @@ class MentorService
      */
     public function getAllMentors()
     {
-        // Find all approved mentor applications
         $approvedApplications = $this->applicationRepository->all()->filter(function ($application) {
             return $application['status'] === 'approved';
         });
 
-        // Group by user ID for unique mentors
         $mentorIds = $approvedApplications->pluck('user_id')->unique()->values();
 
-        // Get user details for each mentor
         $mentors = $mentorIds->map(function ($userId) use ($approvedApplications) {
             $user = $this->userRepository->findById($userId);
             $mentorApplications = $approvedApplications->filter(function ($app) use ($userId) {
@@ -78,7 +75,6 @@ class MentorService
             ];
         }
 
-        // Check if user exists
         $user = $this->userRepository->findById($userId);
         if (!$user) {
             return [
@@ -87,7 +83,6 @@ class MentorService
             ];
         }
 
-        // Check if course exists
         $course = $this->courseRepository->findById($data['course_id']);
         if (!$course) {
             return [
@@ -96,7 +91,14 @@ class MentorService
             ];
         }
 
-        // Check if user has any pending applications
+        $userCourses = $this->userRepository->getUserCourses($userId);
+        if (!in_array($data['course_id'], $userCourses)) {
+            return [
+                'success' => false,
+                'errors' => ['course_id' => 'You can only apply to mentor courses you have studied'],
+            ];
+        }
+
         $pendingApplications = $this->applicationRepository->findPendingByUser($userId);
         if ($pendingApplications->isNotEmpty()) {
             return [
@@ -105,7 +107,6 @@ class MentorService
             ];
         }
 
-        // Create the application
         $application = $this->applicationRepository->create([
             'user_id' => $userId,
             'course_id' => $data['course_id'],
@@ -186,7 +187,6 @@ class MentorService
     {
         $applications = $this->applicationRepository->all();
 
-        // Enrich application data with user and course info
         return $applications->map(function ($application) {
             $user = $this->userRepository->findById($application['user_id']);
             $course = $this->courseRepository->findById($application['course_id']);
@@ -215,7 +215,6 @@ class MentorService
             return $application['user_id'] == $userId;
         });
 
-        // Enrich application data with course info
         return $applications->map(function ($application) {
             $course = $this->courseRepository->findById($application['course_id']);
 
@@ -258,6 +257,69 @@ class MentorService
             'name' => $user['name'],
             'email' => $user['email'],
             'mentored_courses' => $mentorCourses->values(),
+        ];
+    }
+
+    /**
+     * Check if a user has any active mentor applications.
+     */
+    public function hasActiveApplication($userId)
+    {
+        $pendingApplications = $this->applicationRepository->findPendingByUser($userId);
+        return $pendingApplications->isNotEmpty();
+    }
+
+    /**
+     * Check if a user is an approved mentor for any course.
+     */
+    public function isMentor($userId)
+    {
+        $approvedApplications = $this->applicationRepository->findByUserAndStatus($userId, 'approved');
+        return $approvedApplications->isNotEmpty();
+    }
+
+    /**
+     * Get user's mentor status for all courses.
+     */
+    public function getUserMentorStatus($userId)
+    {
+        $user = $this->userRepository->findById($userId);
+        if (!$user) {
+            return null;
+        }
+
+        $studiedCourseIds = $this->userRepository->getUserCourses($userId);
+        $studiedCourses = collect($studiedCourseIds)->map(function ($courseId) {
+            return $this->courseRepository->findById($courseId);
+        })->filter()->values();
+
+        $applications = $this->applicationRepository->all()->filter(function ($app) use ($userId) {
+            return $app['user_id'] == $userId;
+        });
+
+        $courseApplications = [];
+        foreach ($applications as $application) {
+            $courseId = $application['course_id'];
+            $courseApplications[$courseId] = $application;
+        }
+
+        $coursesWithStatus = $studiedCourses->map(function ($course) use ($courseApplications) {
+            $status = 'not_applied';
+            $application = $courseApplications[$course['id']] ?? null;
+
+            if ($application) {
+                $status = $application['status'];
+            }
+
+            return array_merge($course, [
+                'mentor_status' => $status,
+                'application' => $application,
+            ]);
+        });
+
+        return [
+            'user' => $user,
+            'courses' => $coursesWithStatus,
         ];
     }
 }

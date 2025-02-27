@@ -54,7 +54,7 @@ class MentorController extends Controller
      */
     public function apply(Request $request)
     {
-        $userId = $request->header('X-User-ID', 1);
+        $userId = $request->attributes->get('user')['id'] ?? $request->header('X-User-ID', 1);
 
         $result = $this->mentorService->applyToBecomeMentor($userId, $request->all());
 
@@ -70,5 +70,27 @@ class MentorController extends Controller
             'message' => 'Application submitted successfully',
             'data' => $result['data'],
         ], 201);
+    }
+
+    /**
+     * Get the current user's mentor status for all courses.
+     */
+    public function getUserMentorStatus(Request $request)
+    {
+        $userId = $request->attributes->get('user')['id'] ?? $request->header('X-User-ID', 1);
+
+        $mentorStatus = $this->mentorService->getUserMentorStatus($userId);
+
+        if (!$mentorStatus) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $mentorStatus,
+        ]);
     }
 }

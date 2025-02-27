@@ -7,6 +7,46 @@
     },
     "item": [
         {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Register New User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"New User\",\n    \"email\": \"newuser@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "register"
+                            ]
+                        },
+                        "description": "Register a new user in the system"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints related to user authentication"
+        },
+        {
             "name": "Courses",
             "item": [
                 {
@@ -69,9 +109,117 @@
                         "description": "Get details of a specific course"
                     },
                     "response": []
+                },
+                {
+                    "name": "Create New Course",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Python for Data Science\",\n    \"description\": \"Learn Python programming and its applications in data analysis, visualization, and machine learning.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/courses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "courses"
+                            ]
+                        },
+                        "description": "Create a new course in the system"
+                    },
+                    "response": []
                 }
             ],
             "description": "Endpoints related to courses"
+        },
+        {
+            "name": "User Courses",
+            "item": [
+                {
+                    "name": "Get User's Studied Courses",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/user/courses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "user",
+                                "courses"
+                            ]
+                        },
+                        "description": "Get a list of courses studied by the authenticated user"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Add Course to User's Studies",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/user/courses/2",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "user",
+                                "courses",
+                                "2"
+                            ]
+                        },
+                        "description": "Add a course to the authenticated user's studied courses"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints related to a user's courses"
         },
         {
             "name": "Mentors",
@@ -160,7 +308,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"course_id\": 3,\n    \"calendly_link\": \"https://calendly.com/janesmith/webdev-mentoring\"\n}"
+                            "raw": "{\n    \"course_id\": 2,\n    \"calendly_link\": \"https://calendly.com/janesmith/data-structures-mentoring\"\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/api/mentors/apply",
@@ -174,6 +322,37 @@
                             ]
                         },
                         "description": "Submit an application to become a mentor"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User Mentor Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/user/mentor-status",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "user",
+                                "mentor-status"
+                            ]
+                        },
+                        "description": "Get the current user's mentor status for all courses"
                     },
                     "response": []
                 }

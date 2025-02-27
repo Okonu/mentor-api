@@ -54,22 +54,40 @@ class UserRepository extends MockRepository implements UserRepositoryInterface
         return $this->data->firstWhere('email', $email);
     }
 
+    protected static $userCourses = [
+        1 => [1, 3],
+        2 => [2, 4],
+        3 => [1, 2, 3, 4],
+    ];
+
     /**
      * Get courses studied by a user.
      */
     public function getUserCourses($userId)
     {
-        $userCourses = [
-            1 => [1, 3],
-            2 => [2, 4],
-            3 => [1, 2, 3, 4],
-        ];
+        return static::$userCourses[$userId] ?? [];
+    }
 
-        return $userCourses[$userId] ?? [];
+    /**
+     * Add a course to a user's studied courses.
+     */
+    public function addUserCourse($userId, $courseId)
+    {
+        if (!isset(static::$userCourses[$userId])) {
+            static::$userCourses[$userId] = [];
+        }
+
+        if (in_array($courseId, static::$userCourses[$userId])) {
+            return false;
+        }
+
+        static::$userCourses[$userId][] = $courseId;
+        return true;
     }
 
     /**
      * Check if a user has an active mentor application.
+     * This is just a placeholder - the actual check is done in MentorService
      */
     public function hasActiveApplication($userId)
     {
@@ -78,6 +96,7 @@ class UserRepository extends MockRepository implements UserRepositoryInterface
 
     /**
      * Check if a user is a mentor for any course.
+     * This is just a placeholder - the actual check is done in MentorService
      */
     public function isMentor($userId)
     {
