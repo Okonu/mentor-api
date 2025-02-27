@@ -1,0 +1,351 @@
+{
+    "info": {
+        "_postman_id": "7a6b8c9d-1234-5678-abcd-ef1234567890",
+        "name": "Mentor-API",
+        "description": "A collection of requests for testing the Mentor API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Courses",
+            "item": [
+                {
+                    "name": "List All Courses",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/courses",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "courses"
+                            ]
+                        },
+                        "description": "Get a list of all available courses"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Course By ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/courses/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "courses",
+                                "1"
+                            ]
+                        },
+                        "description": "Get details of a specific course"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints related to courses"
+        },
+        {
+            "name": "Mentors",
+            "item": [
+                {
+                    "name": "List All Mentors",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/mentors",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "mentors"
+                            ]
+                        },
+                        "description": "Get a list of all approved mentors"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Mentor Profile",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/mentors/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "mentors",
+                                "1"
+                            ]
+                        },
+                        "description": "Get details of a specific mentor"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Apply To Become Mentor",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "2",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"course_id\": 3,\n    \"calendly_link\": \"https://calendly.com/janesmith/webdev-mentoring\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/mentors/apply",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "mentors",
+                                "apply"
+                            ]
+                        },
+                        "description": "Submit an application to become a mentor"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints related to mentors"
+        },
+        {
+            "name": "Applications",
+            "item": [
+                {
+                    "name": "List All Applications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "3",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/applications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "applications"
+                            ]
+                        },
+                        "description": "Get a list of all mentor applications (admin only)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User Applications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "1",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/user/applications",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "user",
+                                "applications"
+                            ]
+                        },
+                        "description": "Get logged-in user's applications"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Approve Application",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "3",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/applications/2/approve",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "applications",
+                                "2",
+                                "approve"
+                            ]
+                        },
+                        "description": "Approve a pending mentor application (admin only)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Reject Application",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "X-User-ID",
+                                "value": "3",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"reason\": \"Insufficient expertise in this subject area\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/applications/2/reject",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "applications",
+                                "2",
+                                "reject"
+                            ]
+                        },
+                        "description": "Reject a pending mentor application with a reason (admin only)"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints related to mentor applications"
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        }
+    ]
+}
